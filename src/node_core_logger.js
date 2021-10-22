@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-LOG_TYPES = {
+var LOG_TYPES = {
   NONE: 0,
   ERROR: 1,
   NORMAL: 2,
