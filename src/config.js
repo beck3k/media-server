@@ -15,13 +15,13 @@ const config = {
     ping_timeout: 60
   },
   http: {
-    port: 80,
+    port: 8000,
     mediaroot: './media',
     webroot: './public',
     allow_origin: '*'
   },
   trans: {
-    ffmpeg: '/usr/local/Cellar/ffmpeg/4.4_2/bin/ffmpeg',
+    ffmpeg: '/usr/bin/ffmpeg',
     tasks: [
       {
         app: 'live',
