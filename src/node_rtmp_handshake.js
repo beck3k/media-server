@@ -41,16 +41,16 @@ function GetServerGenuineConstDigestOffset(buf) {
 }
 
 function detectClientMessageFormat(clientsig) {
-  let computedSignature, msg, providedSignature, sdl;
-  sdl = GetServerGenuineConstDigestOffset(clientsig.slice(772, 776));
-  msg = Buffer.concat([clientsig.slice(0, sdl), clientsig.slice(sdl + SHA256DL)], 1504);
-  computedSignature = calcHmac(msg, GenuineFPConst);
-  providedSignature = clientsig.slice(sdl, sdl + SHA256DL);
+  // let computedSignature, msg, providedSignature, sdl;
+  var sdl = GetServerGenuineConstDigestOffset(clientsig.slice(772, 776));
+  var msg = Buffer.concat([clientsig.slice(0, sdl), clientsig.slice(sdl + SHA256DL)], 1504);
+  var computedSignature = calcHmac(msg, GenuineFPConst);
+  var providedSignature = clientsig.slice(sdl, sdl + SHA256DL);
   if (computedSignature.equals(providedSignature)) {
     return MESSAGE_FORMAT_2;
   }
   sdl = GetClientGenuineConstDigestOffset(clientsig.slice(8, 12));
-  msg = Buffer.concat([clientsig.slice(0, sdl), clientsig.slice(sdl + SHA256DL)], 1504);
+   msg = Buffer.concat([clientsig.slice(0, sdl), clientsig.slice(sdl + SHA256DL)], 1504);
   computedSignature = calcHmac(msg, GenuineFPConst);
   providedSignature = clientsig.slice(sdl, sdl + SHA256DL);
   if (computedSignature.equals(providedSignature)) {
@@ -70,8 +70,8 @@ function generateS1(messageFormat) {
     serverDigestOffset = GetServerGenuineConstDigestOffset(handshakeBytes.slice(772, 776));
   }
 
-  msg = Buffer.concat([handshakeBytes.slice(0, serverDigestOffset), handshakeBytes.slice(serverDigestOffset + SHA256DL)], RTMP_SIG_SIZE - SHA256DL);
-  hash = calcHmac(msg, GenuineFMSConst);
+  var msg = Buffer.concat([handshakeBytes.slice(0, serverDigestOffset), handshakeBytes.slice(serverDigestOffset + SHA256DL)], RTMP_SIG_SIZE - SHA256DL);
+  var hash = calcHmac(msg, GenuineFMSConst);
   hash.copy(handshakeBytes, serverDigestOffset, 0, 32);
   return handshakeBytes;
 }

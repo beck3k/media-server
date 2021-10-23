@@ -43,10 +43,15 @@ var node_media_server_1 = __importDefault(require("./node_media_server"));
 var config_1 = __importDefault(require("./config"));
 var dotenv_1 = __importDefault(require("dotenv"));
 var mongoose_1 = __importDefault(require("mongoose"));
+var db_1 = require("./db");
 dotenv_1.default.config();
 var nms = new node_media_server_1.default(config_1.default);
+function streamByPath(path) {
+    return path.split('/')[2];
+}
 function run() {
     return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -55,6 +60,33 @@ function run() {
                 case 1:
                     _a.sent();
                     console.log('Database Connected');
+                    nms.on('prePublish', function (id, StreamPath, args) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            return [2 /*return*/];
+                        });
+                    }); });
+                    nms.on('postPublish', function (id, path, args) { return __awaiter(_this, void 0, void 0, function () {
+                        var stream;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, db_1.StreamModel.findByIdAndUpdate(streamByPath(path), { isLive: true })];
+                                case 1:
+                                    stream = _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); });
+                    nms.on('donePublish', function (id, path, args) { return __awaiter(_this, void 0, void 0, function () {
+                        var stream;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, db_1.StreamModel.findByIdAndUpdate(streamByPath(path), { isLive: false })];
+                                case 1:
+                                    stream = _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); });
                     nms.run();
                     return [2 /*return*/];
             }
